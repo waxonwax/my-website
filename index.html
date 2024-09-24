@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Geometric Background</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Arial', sans-serif;
+            background-color: #000; /* 背景を黒に */
+            overflow: auto; /* スクロールを有効にする */
+        }
+
+        /* ナビゲーション */
+        nav {
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            width: 100%;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            text-align: right; /* 右揃え */
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: flex-end; /* 右揃え */
+            gap: 20px;
+        }
+
+        nav ul li a {
+            color: #fff; /* 白色 */
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #808080; /* グレー */
+        }
+
+        h2 {
+            color: #fff; /* 白色 */
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* グリッドレイアウト */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 20px auto;
+            z-index: 10;
+        }
+
+        .grid-item {
+            border: 2px solid #fff; /* 白色 */
+            background: #111;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            transition: transform 0.3s ease, border-color 0.3s; /* 境界線の色も変わる */
+        }
+
+        .grid-item img, .grid-item video {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+        }
+
+        .grid-item:hover {
+            transform: scale(1.05);
+            border-color: #808080; /* グレー */
+        }
+
+        /* SoundCloudリンクのスタイル */
+        .soundcloud-link {
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .soundcloud-link a {
+            color: #fff; /* 白色 */
+            font-size: 18px;
+            text-decoration: none;
+            padding: 10px 20px;
+            border: 2px solid #fff; /* 白色 */
+            border-radius: 5px;
+            transition: background 0.3s, color 0.3s, border-color 0.3s; /* 境界線の色も変わる */
+        }
+
+        .soundcloud-link a:hover {
+            background: #808080; /* グレー */
+            color: #000; /* 黒色 */
+            border-color: #808080; /* グレー */
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="#" onclick="showCategory('images')">Images</a></li>
+            <li><a href="#" onclick="showCategory('movies')">Movies</a></li>
+            <li><a href="#" onclick="showCategory('music')">Music</a></li>
+        </ul>
+    </nav>
+
+    <section id="images" class="category">
+        <h2>Images</h2>
+        <div class="grid-container" id="imageGrid">
+            <div class="grid-item"><img src="image1.jpg" alt="Image 1"></div>
+            <div class="grid-item"><img src="image2.jpg" alt="Image 2"></div>
+        </div>
+    </section>
+
+    <section id="movies" class="category hidden">
+        <h2>Movies</h2>
+        <div class="grid-container" id="movieGrid">
+            <!-- 動画が動的に追加されます -->
+        </div>
+    </section>
+
+    <section id="music" class="category hidden">
+        <h2>Music</h2>
+        <div class="soundcloud-link">
+            <p>My latest mix</p>
+            <a href="https://soundcloud.com/your-soundcloud-link" target="_blank">Listen on SoundCloud</a>
+        </div>
+    </section>
+
+    <script>
+        // 動的に追加する機能（現在は画像1と画像2のみ）
+        const videos = ['video1.mp4', 'video2.mp4'];
+        const movieGrid = document.getElementById('movieGrid');
+
+        // 動画を追加
+        function addVideos() {
+            videos.forEach(src => {
+                const videoElement = document.createElement('div');
+                videoElement.classList.add('grid-item');
+                videoElement.innerHTML = `<video controls><source src="${src}" type="video/mp4"></video>`;
+                movieGrid.appendChild(videoElement);
+            });
+        }
+
+        // カテゴリーを表示
+        function showCategory(category) {
+            const categories = document.querySelectorAll('.category');
+            categories.forEach(cat => cat.classList.add('hidden'));
+
+            // 選択したカテゴリーを表示
+            const selectedCategory = document.getElementById(category);
+            selectedCategory.classList.remove('hidden');
+
+            // 映画のカテゴリーが選択されたとき、動画を追加
+            if (category === 'movies' && !movieGrid.children.length) {
+                addVideos();
+            }
+        }
+    </script>
+</body>
+</html>
